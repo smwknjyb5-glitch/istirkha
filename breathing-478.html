@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تمرين النوم 4-7-8</title>
+<style>
+  :root{
+    --navy:#0a0e1a;
+    --navy2:#111830;
+    --gold:#d4af37;
+    --gold-soft:#f0d98c;
+    --text:#e8e6df;
+    --muted:#8a91a8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    min-height:100vh;
+    background: radial-gradient(circle at 50% 20%, #17203f 0%, var(--navy) 60%, #05070d 100%);
+    color:var(--text);
+    font-family:'Tahoma','Segoe UI',sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    overflow-x:hidden;
+  }
+  h1{
+    font-size:1.6rem;
+    color:var(--gold-soft);
+    margin-bottom:6px;
+    text-align:center;
+    letter-spacing:1px;
+  }
+  .subtitle{
+    color:var(--muted);
+    font-size:0.9rem;
+    margin-bottom:28px;
+    text-align:center;
+    max-width:420px;
+    line-height:1.8;
+  }
+  .stage{
+    position:relative;
+    width:280px;
+    height:280px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:30px;
+  }
+  .ring{
+    position:absolute;
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    border:1px solid rgba(212,175,55,0.25);
+  }
+  .ring.r2{ width:88%; height:88%; }
+  .circle{
+    width:170px;
+    height:170px;
+    border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, rgba(212,175,55,0.35), rgba(212,175,55,0.05) 60%, transparent 75%);
+    border:2px solid var(--gold);
+    box-shadow:0 0 40px rgba(212,175,55,0.25), inset 0 0 30px rgba(212,175,55,0.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: transform 1s linear, box-shadow 1s linear;
+  }
+  .circle-inner{
+    text-align:center;
+  }
+  .phase-text{
+    font-size:1.3rem;
+    color:var(--gold-soft);
+    font-weight:bold;
+    margin-bottom:4px;
+  }
+  .count{
+    font-size:2.6rem;
+    color:var(--text);
+    font-weight:bold;
+    font-variant-numeric: tabular-nums;
+  }
+  .info-row{
+    display:flex;
+    gap:22px;
+    margin-bottom:26px;
+    color:var(--muted);
+    font-size:0.95rem;
+  }
+  .info-row span b{
+    color:var(--gold-soft);
+  }
+  .controls{
+    display:flex;
+    gap:14px;
+    margin-bottom:20px;
+  }
+  button{
+    background:linear-gradient(180deg, #1a2340, #0e1428);
+    border:1px solid var(--gold);
+    color:var(--gold-soft);
+    padding:12px 28px;
+    border-radius:30px;
+    font-size:1rem;
+    cursor:pointer;
+    transition:.25s;
+    font-family:inherit;
+  }
+  button:hover{
+    background:var(--gold);
+    color:var(--navy);
+    box-shadow:0 0 18px rgba(212,175,55,0.5);
+  }
+  button:active{ transform:scale(0.96); }
+  #resetBtn{
+    border-color: var(--muted);
+    color:var(--muted);
+    padding:12px 22px;
+  }
+  #resetBtn:hover{
+    background:var(--muted);
+    color:var(--navy);
+    box-shadow:none;
+  }
+  .steps{
+    max-width:420px;
+    width:100%;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(212,175,55,0.15);
+    border-radius:14px;
+    padding:18px 20px;
+    margin-top:10px;
+    font-size:0.9rem;
+    line-height:2;
+    color:var(--muted);
+  }
+  .steps b{ color:var(--gold-soft); }
+  .steps div{ display:flex; justify-content:space-between; }
+  footer{
+    margin-top:22px;
+    font-size:0.75rem;
+    color:#4a5068;
+    text-align:center;
+  }
+  @keyframes pulseGold{
+    0%,100%{ box-shadow:0 0 20px rgba(212,175,55,0.2); }
+    50%{ box-shadow:0 0 40px rgba(212,175,55,0.45); }
+  }
+</style>
+</head>
+<body>
+
+<h1>🌙 تمرين النوم 4-7-8</h1>
+<p class="subtitle">تقنية تنفس بسيطة تساعد على الاسترخاء والاستعداد للنوم:
+شهيق 4 ثوانٍ، حبس النفس 7 ثوانٍ، زفير 8 ثوانٍ.</p>
+
+<div class="stage">
+  <div class="ring"></div>
+  <div class="ring r2"></div>
+  <div class="circle" id="circle">
+    <div class="circle-inner">
+      <div class="phase-text" id="phaseText">اضغط ابدأ</div>
+      <div class="count" id="countText">—</div>
+    </div>
+  </div>
+</div>
+
+<div class="info-row">
+  <span>الدورة: <b id="cycleNum">0</b></span>
+  <span>الجولات المكتملة: <b id="cyclesDone">0</b></span>
+</div>
+
+<div class="controls">
+  <button id="startBtn">ابدأ التمرين</button>
+  <button id="resetBtn">إعادة</button>
+</div>
+
+<div class="steps">
+  <div><span>شهيق من الأنف</span><b>4 ثوانٍ</b></div>
+  <div><span>حبس النفس</span><b>7 ثوانٍ</b></div>
+  <div><span>زفير من الفم ببطء</span><b>8 ثوانٍ</b></div>
+</div>
+
+<footer>يُفضّل تكرار 4 دورات متتالية · اجلس أو استلقِ بوضعية مريحة</footer>
+
+<script>
+const circle = document.getElementById('circle');
+const phaseText = document.getElementById('phaseText');
+const countText = document.getElementById('countText');
+const startBtn = document.getElementById('startBtn');
+const resetBtn = document.getElementById('resetBtn');
+const cycleNum = document.getElementById('cycleNum');
+const cyclesDone = document.getElementById('cyclesDone');
+
+const phases = [
+  { name: 'شهيق... 🌬️', duration: 4, scale: 1.35, glow: 45 },
+  { name: 'احبس النفس', duration: 7, scale: 1.35, glow: 55 },
+  { name: 'زفير... 🍃', duration: 8, scale: 0.85, glow: 20 }
+];
+
+let running = false;
+let phaseIndex = 0;
+let secondsLeft = 0;
+let totalCycles = 0;
+let timerInterval = null;
+
+let audioCtx = null;
+function playTick(freq){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.frequency.value = freq;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.4);
+  }catch(e){}
+}
+
+function applyPhaseVisual(phase){
+  circle.style.transform = `scale(${phase.scale})`;
+  circle.style.boxShadow = `0 0 ${phase.glow}px rgba(212,175,55,0.4), inset 0 0 30px rgba(212,175,55,0.2)`;
+  circle.style.transition = `transform ${phase.duration}s ease-in-out`;
+  phaseText.textContent = phase.name;
+}
+
+function startPhase(index){
+  phaseIndex = index;
+  const phase = phases[index];
+  secondsLeft = phase.duration;
+  countText.textContent = secondsLeft;
+  applyPhaseVisual(phase);
+  playTick(index === 0 ? 440 : index === 1 ? 550 : 330);
+}
+
+function tick(){
+  secondsLeft--;
+  if(secondsLeft > 0){
+    countText.textContent = secondsLeft;
+  } else {
+    let nextIndex = phaseIndex + 1;
+    if(nextIndex >= phases.length){
+      nextIndex = 0;
+      totalCycles++;
+      cyclesDone.textContent = totalCycles;
+    }
+    cycleNum.textContent = totalCycles + 1;
+    startPhase(nextIndex);
+  }
+}
+
+function startExercise(){
+  running = true;
+  startBtn.textContent = 'إيقاف مؤقت';
+  cycleNum.textContent = 1;
+  startPhase(0);
+  timerInterval = setInterval(tick, 1000);
+}
+
+function pauseExercise(){
+  running = false;
+  startBtn.textContent = 'استئناف';
+  clearInterval(timerInterval);
+  phaseText.textContent = 'متوقف مؤقتاً';
+}
+
+function resumeExercise(){
+  running = true;
+  startBtn.textContent = 'إيقاف مؤقت';
+  applyPhaseVisual(phases[phaseIndex]);
+  countText.textContent = secondsLeft;
+  timerInterval = setInterval(tick, 1000);
+}
+
+startBtn.addEventListener('click', () => {
+  if(!running && timerInterval === null){
+    startExercise();
+  } else if(running){
+    pauseExercise();
+  } else {
+    resumeExercise();
+  }
+});
+
+resetBtn.addEventListener('click', () => {
+  running = false;
+  clearInterval(timerInterval);
+  timerInterval = null;
+  phaseIndex = 0;
+  totalCycles = 0;
+  secondsLeft = 0;
+  cycleNum.textContent = '0';
+  cyclesDone.textContent = '0';
+  phaseText.textContent = 'اضغط ابدأ';
+  countText.textContent = '—';
+  circle.style.transform = 'scale(1)';
+  circle.style.boxShadow = '0 0 20px rgba(212,175,55,0.2)';
+  startBtn.textContent = 'ابدأ التمرين';
+});
+</script>
+
+</body>
+</html>
